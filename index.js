@@ -33,6 +33,7 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)  await client.connect();
     
     const productCollection = client.db('productDB').collection('product');
+    const myCart = client.db('productDB').collection('cart');
    
 
     app.get('/product', async(req,res) => {
@@ -56,11 +57,29 @@ async function run() {
       res.send(result);
     });
 
+
+
     app.post('/product', async(req,res) => {
       const newProd = req.body;
       const result = await productCollection.insertOne(newProd);
       res.send(result);
     })
+
+
+    app.post('/cart', async(req,res) => {
+      const newProd = req.body;
+      const result = await myCart.insertOne(newProd);
+      res.send(result);
+    })
+
+    
+
+    app.get('/cart',async(req,res) => {
+      const cursor = myCart.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    })
+
    
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
