@@ -203,11 +203,20 @@ async function run() {
 
 
 
+    // app.get('/cart', async (req, res) => {
+    //   const cursor = myCart.find();
+    //   const result = await cursor.toArray();
+    //   res.send(result);
+    // })
+
     app.get('/cart', async (req, res) => {
-      const cursor = myCart.find();
+      const email = req.query.email; // the query parameter is named 'email'
+      const query = { email: email }; // Define the query object with the email parameter
+      
+      const cursor = myCart.find(query); // Using the query in the find function
       const result = await cursor.toArray();
       res.send(result);
-    })
+    });
 
     // app.get('/cart/:id',async(req,res) => {
     //   const id = req.params.id;
@@ -218,7 +227,7 @@ async function run() {
 
     app.delete('/cart/:id', async (req, res) => {
       const id = req.params.id;
-      const query = { _id: id };
+      const query = { _id: new ObjectId(id) };
       const result = await myCart.deleteOne(query);
       res.send(result);
     })
@@ -240,11 +249,11 @@ run().catch(console.dir);
 
 
 app.get('/', (req, res) => {
-  res.send('SERVER IS LIVE!!');
+  res.send('FINAL DEPLOYMENT!!');
 })
 
 
 app.listen(port, () => {
-  console.log(`Coffee server is running on PORT ${port}`)
+  console.log(`My server is running on PORT ${port}`)
 })
 
