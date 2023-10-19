@@ -42,6 +42,8 @@ async function run() {
       res.send(result);
     })
 
+   
+
     app.get('/product/:brand',async(req,res) => {
       const brand = req.params.brand;
       const query = {brand: brand};
@@ -49,10 +51,19 @@ async function run() {
       res.send(result);
     })
 
+    app.get('/product/:brand/update/:id', async (req, res) => {
+      const brand = req.params.brand;
+      const id = req.params.id;
+      const query = { brand: brand, _id: new ObjectId(id) }; 
+      const result = await productCollection.findOne(query);
+      res.send(result);
+    });
+
+
     app.get('/product/:brand/:id', async (req, res) => {
       const brand = req.params.brand;
       const id = req.params.id;
-      const query = { brand: brand, _id: new ObjectId(id) }; // Assuming you have an '_id' field in your database
+      const query = { brand: brand, _id: new ObjectId(id) }; 
       const result = await productCollection.findOne(query);
       res.send(result);
     });
@@ -72,13 +83,27 @@ async function run() {
       res.send(result);
     })
 
-    
+
 
     app.get('/cart',async(req,res) => {
       const cursor = myCart.find();
       const result = await cursor.toArray();
       res.send(result);
     })
+
+    // app.get('/cart/:id',async(req,res) => {
+    //   const id = req.params.id;
+    //   const query = {_id: new ObjectId(id)};
+    //   const result = await myCart.find(query).toArray();
+    //   res.send(result);
+    // })
+
+    app.delete('/cart/:id',async(req,res) => {
+     const id = req.params.id; 
+     const query = {_id: id};
+      const result = await myCart.deleteOne(query);
+      res.send(result);
+   })
 
    
     // Send a ping to confirm a successful connection
